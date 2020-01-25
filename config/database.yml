@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: showoff_tech_challenge_production
-  username: showoff_tech_challenge
+  username: nabeelnazir
   password: <%= ENV['SHOWOFF_TECH_CHALLENGE_DATABASE_PASSWORD'] %>

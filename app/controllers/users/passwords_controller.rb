@@ -38,7 +38,6 @@ class Users::PasswordsController < Devise::PasswordsController
           "new_password": params[:user][:password]
       }
    }
-   binding.pry
    showoff_api_call(api_link,"post", authorisation, body)
   end
 
