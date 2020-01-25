@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   require "uri"
   require "net/http"
-  before_action :configure_permitted_parameters, if: :devise_controller?
   
   #Function to call the Showoff Api's
   def showoff_api_call(api_link, api_type, authorization = nil, body = nil)
@@ -31,12 +30,6 @@ class ApplicationController < ActionController::Base
       return response
     end
   end
-
-  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:showoff_user_id, :showoff_access_token, :showoff_refresh_token])
-  end
   
   private
 
@@ -57,11 +50,11 @@ class ApplicationController < ActionController::Base
   end
 
   def client_id
-     Rails.application.credentials.config[:client_id]
+     Rails.application.credentials.config[:client_id].to_s
   end
   
   def client_secret
-    Rails.application.credentials.config[:client_secret]
+    Rails.application.credentials.config[:client_secret].to_s
   end
 
   def authorization_bearer(user)
