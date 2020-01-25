@@ -71,7 +71,7 @@ class WidgetsController < ApplicationController
   # PATCH/PUT /widgets/1
   # PATCH/PUT /widgets/1.json
   def update
-    widget = Widget.find(params[:id])
+    widget = Widget.find_by_id(params[:id])
     #Updating the widget details
     if widget.present?
       authorization = "Bearer " + current_user.showoff_access_token.to_s
@@ -79,13 +79,14 @@ class WidgetsController < ApplicationController
       body =  {
                 "widget": {
                             "name": params[:widget]["name"],
-                            "description": params[:widget]["description"]
+                            "description": params[:widget]["description"],
+                            "kind": params[:widget]["kind"],
                           }
               }
       @widget = showoff_api_call(api_link, "put", authorization, body)
       
       respond_to do |format|
-        if widget.update(widget_params)
+        if @widget["code"] && widget.update(widget_params)
           format.html { redirect_to my_widget_path, notice: 'Widget was successfully updated.' }
           format.json { render :index, status: :ok, location: my_widget_path }
         else

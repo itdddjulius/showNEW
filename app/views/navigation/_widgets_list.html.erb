@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Kind</th>
+      <th>User</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @widgets.each do |w| %>
+      <tr>
+        <td><%= w["name"] %></td>
+        <td><%= w["description"] %></td>
+        <td><%= w["kind"] %></td>
+        <td><%= link_to w["user"]["id"], user_path(id: w["user"]["id"]) %></td>
+        <%if user_signed_in?%>
+          <%if current_user.showoff_user_id == w["user"]["id"].to_i %>
+            <td><%= link_to 'Edit', edit_widget_path(w["id"]) %></td>
+            <td><%= link_to 'Destroy', delete_widget_path(w["id"]) %></td>
+          <%end%>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+<%if user_signed_in?%>
+  <%= link_to 'New Widget', new_widget_path, class: "button primary" %>
+<% end -%>

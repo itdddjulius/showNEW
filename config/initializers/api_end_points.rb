@@ -1,0 +1,5 @@
+USERS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users"
+VISIBLE_WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/visible?client_id="
+MY_USER_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me"
+MY_WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/widgets"
+USER_WIDGETS="https://showoff-rails-react-production.herokuapp.com/api/v1/users/"

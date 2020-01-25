@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   root 'widgets#index'
   post '/search' => 'widgets#search'
   get '/delete_widget/:id' => 'widgets#destroy', as: :delete_widget
-  get '/my_widget' => 'widgets#my_widget', as: :my_widget
+  get '/my_widgets' => 'widgets#my_widget', as: :my_widget
 end
