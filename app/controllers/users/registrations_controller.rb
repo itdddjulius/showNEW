@@ -17,16 +17,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
             "image_url": params[:user][:image_url]
           }
         }
-    # response = showoff_api_call(USERS_URL, "post", body)
-    url = URI("https://showoff-rails-react-production.herokuapp.com/api/v1/users")
-    https = Net::HTTP.new(url.host, url.port);
-    https.use_ssl = true
-    request = Net::HTTP::Post.new(url)
-    request["Content-Type"] = "application/json"
-    request.body = body.to_json
-    response = https.request(request)
-    response = JSON.parse(response.body)
+    
+    response = showoff_api_call(USERS_URL, "post", nil, body)
+    
     return response["message"] if response["code"] != 0 
+    
     #override the device registrations method to store showoff token in user object.
     build_resource(sign_up_params.to_h.merge!({:showoff_user_id => response["data"]["user"]["id"], :showoff_access_token => response["data"]["token"]["access_token"], :showoff_refresh_token => response["data"]["token"]["refresh_token"]}))
     if resource.save
