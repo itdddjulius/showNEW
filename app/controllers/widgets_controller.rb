@@ -1,34 +1,18 @@
 class WidgetsController < ApplicationController
+  before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [:show, :index, :search]
   before_action :set_widget, only: [:show, :edit, :update, :destroy]
-
-  # GET /widgets
-  # GET /widgets.json
+  include ShowoffApiService
+  
   def index    
     #Display all the visible widget on the root page
-    api_link = VISIBLE_WIDGETS_URL + client_id + "&client_secret=" + client_secret
-    response = showoff_api_call(api_link,"get")
-    @widgets = response["data"]["widgets"]
+    all_visible_widgets(params[:id], params[:user_info])
   end
 
   def my_widget
     #Displays logged_in users widgets
-    if user_signed_in?
-      authorisation = {:Authorization => 'Bearer ' + current_user.showoff_access_token}
-      api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/users/" + current_user.showoff_user_id.to_s + "/widgets?client_id=" + Rails.application.credentials.config[:client_id] + "&client_secret=" + client_secret #Using User ID API
-      response = showoff_api_call(api_link,"get", authorisation, nil)
-    end
-    @widgets = response["data"]["widgets"]
-  end
-
-  def search
-    #Searching for a particular word in a widget
-    if user_signed_in?
-      api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/users/"+ current_user.showoff_user_id.to_s + "/widgets?client_id=" + Rails.application.credentials.config[:client_id] + "&client_secret=" + client_secret + "&term=" + params[:search].to_s #using User ID API
-    else
-      api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/visible?client_id=" + Rails.application.credentials.config[:client_id] + "&client_secret=" + client_secret + "&term=" + params[:search].to_s
-    end
-    response = showoff_api_call(api_link,"get", nil, nil)
-    @widgets = response["data"]["widgets"]
+    code = my_widgets
+    redirect_to "/" if code != 200 
   end
 
   # GET /widgets/new
@@ -36,7 +20,6 @@ class WidgetsController < ApplicationController
     @widget = Widget.new
   end
 
-  # GET /widgets/1/edit
   def edit
   end
 
@@ -44,21 +27,11 @@ class WidgetsController < ApplicationController
   # POST /widgets.json
   def create
     #Creating the logged_in user widget
-    api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/widgets"
-    authorization = "Bearer " + current_user.showoff_access_token
-    body = {
-              "name": params[:widget]["name"],
-              "description": params[:widget]["name"],
-              "kind": params[:widget]["kind"]
-            }
-    
-    response = showoff_api_call(api_link, "post", authorization, body)
-    @widget = response["data"]["widget"]
-    widget = current_user.widgets.create(body)    #entering data in table as well
-    widget.update_attributes(showoff_widget_id: @widget["id"])
-    
+    response = create_widget
+    @widget = response[:api_widget]
+    widget = response[:widget]
     respond_to do |format|
-      if widget.present?
+      if @widget.present? && widget.present?
         format.html { redirect_to my_widget_path, notice: 'Widget was successfully created.' }
         format.json { render :index, status: :created, location: widget }
       else
@@ -112,6 +85,12 @@ class WidgetsController < ApplicationController
       format.html { redirect_to my_widget_path, notice: 'Widget was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def search
+    #Searching for a particular word in a widget
+    code = search_widgets
+    redirect_to "/" if code != 200
   end
 
   private

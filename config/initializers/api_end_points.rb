@@ -4,3 +4,5 @@ MY_USER_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/m
 MY_WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/widgets"
 USER_WIDGETS="https://showoff-rails-react-production.herokuapp.com/api/v1/users/"
 MY_USER_WIDGETS="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/widgets?"
+WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/widgets"
+REFRESH_TOKEN="https://showoff-rails-react-production.herokuapp.com/oauth/token"

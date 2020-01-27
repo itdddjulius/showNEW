@@ -7,6 +7,16 @@ module ShowoffApiConnectorService
 
     #Function to call the Showoff Api's
     def showoff_api_call(api_link, api_type, authorization = nil, body = nil)
+      response = send_request(api_link, api_type, authorization, body)
+      if response["message"] == "Your session has expired. Please login again to continue."
+        refresh_token #to refresh token if it get expired
+        response = send_request(api_link, api_type, authorization, body) #API called again to treat the failed API call due to session expired.
+      end
+      response
+    end
+
+
+    def send_request(api_link, api_type, authorization = nil, body = nil)
       url = URI(api_link)
       https = Net::HTTP.new(url.host, url.port);
       https.use_ssl = true
@@ -19,34 +29,41 @@ module ShowoffApiConnectorService
       elsif api_type == "get"
         return JSON.parse(RestClient.get(api_link, authorization))
       elsif api_type == "delete"
-        return JSON.parse(RestClient.delete(api_link, authorization))      
+        return JSON.parse(RestClient.delete(api_link, authorization))     
       end
   
       #Used for Net::Http
-      request["Authorization"] = authorization if authorization.present?
+      request["Authorization"] = "Bearer #{current_user.reload.showoff_access_token}" if authorization.present?
       request["Content-Type"] = "application/json"
       request.body = body.to_json #converting the data into json format
-      response = JSON.parse(https.request(request).read_body) #API called
-      if response["message"] == "Your session has expired. Please login again to continue."
-        refresh_token #to refresh token if it get expired
-      else
-        return response
-      end
+      JSON.parse(https.request(request).read_body) #API called
     end
   
     def refresh_token
-      api_link = URI("https://showoff-rails-react-production.herokuapp.com/oauth/token")
-  
-      authorization = "Bearer " + current_user.showoff_access_token
-      body = {
-                "grant_type": "refresh_token",
-                "refresh_token": current_user.showoff_refresh_token,
-                "client_id": client_id,
-                "client_secret": client_secret
-              }.to_json
-  
-      response = showoff_api_call(api_link,"post", authorization, body)
-      current_user.update_attributes(showoff_access_token: response["data"]["token"]["access_token"]) #updating token details in user table
-      return response
+      # api_link = URI(REFRESH_TOKEN)
+      # body = {
+      #           "grant_type": "refresh_token",
+      #           "refresh_token": current_user.showoff_refresh_token,
+      #           "client_id": client_id,
+      #           "client_secret": client_secret
+      #         }.to_json
+      # response = showoff_api_call(api_link,"post", authorization_bearer(current_user.showoff_access_token), body)
+      url = URI("https://showoff-rails-react-production.herokuapp.com/oauth/token")
+
+      https = Net::HTTP.new(url.host, url.port);
+      https.use_ssl = true
+
+      request = Net::HTTP::Post.new(url)
+      request["Content-Type"] = "application/json"
+      request["Authorization"] = "Bearer #{current_user.showoff_access_token}"
+      request.body = "{\n    \"grant_type\": \"refresh_token\",\n    \"refresh_token\": \"#{current_user.showoff_refresh_token}\",\n    \"client_id\": \"277ef29692f9a70d511415dc60592daf4cf2c6f6552d3e1b769924b2f2e2e6fe\",\n    \"client_secret\": \"d6106f26e8ff5b749a606a1fba557f44eb3dca8f48596847770beb9b643ea352\"\n}"
+
+      response = https.request(request)
+      response = JSON.parse response.body
+      current_user.update_attributes(showoff_access_token: response["data"]["token"]["access_token"], showoff_refresh_token: response["data"]["token"]["refresh_token"]) #updating token details in user table
+    end
+
+    def authorization_bearer(token)
+      {:Authorization => 'Bearer ' + token }
     end
 end
