@@ -10,7 +10,7 @@
 		<ul class="nav navbar-nav navbar-right">
 			<%if user_signed_in?%>
 				<li><%= link_to("My Widgets", my_widget_path) %></li>
-				<li><%= link_to(current_user.first_name, user_path(current_user.showoff_user_id.to_s)) %></li>
+				<li><%= link_to(current_user.first_name, "/users/#{current_user.showoff_user_id}?user_info=true") %></li>
 			 	<li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
 			<%else%>
 				<li><a href="/users/sign_up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>

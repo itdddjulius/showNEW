@@ -3,3 +3,4 @@ VISIBLE_WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1
 MY_USER_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me"
 MY_WIDGETS_URL="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/widgets"
 USER_WIDGETS="https://showoff-rails-react-production.herokuapp.com/api/v1/users/"
+MY_USER_WIDGETS="https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/widgets?"
