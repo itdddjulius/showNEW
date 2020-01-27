@@ -15,7 +15,6 @@ class WidgetsController < ApplicationController
     redirect_to "/" if code != 200 
   end
 
-  # GET /widgets/new
   def new
     @widget = Widget.new
   end
@@ -23,8 +22,6 @@ class WidgetsController < ApplicationController
   def edit
   end
 
-  # POST /widgets
-  # POST /widgets.json
   def create
     #Creating the logged_in user widget
     response = create_widget
@@ -37,8 +34,6 @@ class WidgetsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /widgets/1
-  # PATCH/PUT /widgets/1.json
   def update
     widget = Widget.find_by_id(params[:id])
     #Updating the widget details
@@ -66,13 +61,10 @@ class WidgetsController < ApplicationController
     end
   end
 
-  # DELETE /widgets/1
-  # DELETE /widgets/1.json
   def destroy
     #Destroy/Delete the widget
     widget = Widget.find_by(showoff_widget_id: params[:id])
     if current_user.showoff_user_id == widget.user.showoff_user_id
-      
       api_link = 'https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/' + params[:id]
       @widget = showoff_api_call(api_link, "delete", {:Authorization => 'Bearer ' + current_user.showoff_access_token}, nil) #deleteing widget from showoff database
       widget.destroy #deleting widget from table
