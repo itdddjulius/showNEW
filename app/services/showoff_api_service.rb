@@ -13,11 +13,18 @@ module ShowoffApiService
             else
                 user_widgets_url = USER_WIDGETS + "#{user_id}/widgets/?client_id=#{client_id}&client_secret=#{client_secret}"
                 response = showoff_api_call(user_widgets_url, "get", {})
-            end    
-            @user = response["data"]["widgets"].first["user"]
-            @widgets = response["data"]["widgets"]
+            end
+            if response["data"]["widgets"].present?
+                @user = response["data"]["widgets"].first["user"] 
+                @widgets = response["data"]["widgets"] if response["data"].present?
+            else
+                @user = nil
+                @widgets = []
+            end
             response = 200
         rescue => exception
+            @user = nil
+            @widgets = []
             flash[:error] = "Something went wrong in user show! #{exception}"
         end
     end
@@ -77,13 +84,5 @@ module ShowoffApiService
         rescue => exception
             flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
         end
-    end
-
-    def client_id
-        Rails.application.credentials.config[:client_id].to_s
-    end
-
-    def client_secret
-        Rails.application.credentials.config[:client_secret].to_s
     end
 end

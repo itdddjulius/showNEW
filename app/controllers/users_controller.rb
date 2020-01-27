@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   #show the user object along with the visible widgets of the user.
   def show
     code = visible_widgets(params[:id], params[:user_info])
-    redirect_to "/" if code != 200 
+    # redirect_to "/" if code != 200 
   end
 
   private

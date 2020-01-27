@@ -4,10 +4,10 @@
   <%= render "devise/shared/error_messages", resource: resource %>
   <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <%= f.label :password, "Current password" %><br />
-    <%= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
-  </div>
+  <%# <div class="field"> %>
+    <%#= f.label :password, "Current password" %><br />
+    <%#= f.password_field :current_password, autofocus: true, autocomplete: "current-password" %>
+  <%# </div> %>
 
   <div class="field">
     <%= f.label :password, "New password" %><br />

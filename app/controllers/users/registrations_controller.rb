@@ -3,6 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   require "uri"
   require "net/http"
+  include ShowoffApiService
   
   # POST /resource. This method will create using showoff API.
   def create
@@ -17,10 +18,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
             "image_url": params[:user][:image_url]
           }
         }
-    
     response = showoff_api_call(USERS_URL, "post", nil, body)
-    
-    return response["message"] if response["code"] != 0 
+    if response["code"] != 0
+      flash[:error] = response["message"]
+      redirect_to "/users/sign_up" and return
+    end
     
     #override the device registrations method to store showoff token in user object.
     build_resource(sign_up_params.to_h.merge!({:showoff_user_id => response["data"]["user"]["id"], :showoff_access_token => response["data"]["token"]["access_token"], :showoff_refresh_token => response["data"]["token"]["refresh_token"]}))

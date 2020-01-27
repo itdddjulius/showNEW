@@ -1,38 +1,40 @@
-<p>
-  <strong>First name:</strong>
-  <%= @user["first_name"].to_s %>
-</p>
-<p>
-  <strong>Last name:</strong>
-  <%= @user["last_name"].to_s %>
-</p>
-<p>
-  <strong>Image:</strong>
-  <%= image_tag (@user["images"]["small_url"]) %>
-</p>
-<% if current_user.present?%>
+<% if @user.present? %>
   <p>
-    <strong>Email:</strong>
-    <%= current_user.email %>
+    <strong>First name:</strong>
+    <%= @user["first_name"].to_s %>
   </p>
   <p>
-    <strong>Access Token:</strong>
-    <%= current_user.showoff_access_token %>
+    <strong>Last name:</strong>
+    <%= @user["last_name"].to_s %>
   </p>
   <p>
-    <strong>Refresh Token:</strong>
-    <%= current_user.showoff_refresh_token %>
+    <strong>Image:</strong>
+    <%= image_tag (@user["images"]["small_url"]) %>
   </p>
-  <p>
-    <strong>Showoff Id:</strong>
-    <%= current_user.showoff_user_id %>
-  </p>
-  <p>
-    <strong>Date of birth:</strong>
-    <%= current_user.date_of_birth %>
-  </p>
-  <!-- <%#= link_to 'Edit', edit_user_path(current_user.id), class: "button primary" %> | -->
-<% end -%>
+  <% if current_user.present?%>
+    <p>
+      <strong>Email:</strong>
+      <%= current_user.email %>
+    </p>
+    <p>
+      <strong>Access Token:</strong>
+      <%= current_user.showoff_access_token %>
+    </p>
+    <p>
+      <strong>Refresh Token:</strong>
+      <%= current_user.showoff_refresh_token %>
+    </p>
+    <p>
+      <strong>Showoff Id:</strong>
+      <%= current_user.showoff_user_id %>
+    </p>
+    <p>
+      <strong>Date of birth:</strong>
+      <%= current_user.date_of_birth %>
+    </p>
+    <!-- <%#= link_to 'Edit', edit_user_path(current_user.id), class: "button primary" %> | -->
+  <% end -%>
+<% end %>
 <%= link_to 'Back', root_path, class: "button primary" %>
 <div style="margin-top: 15px;">
   <%= render 'navigation/widgets_list', locale => {widgets: @widgets} %>
