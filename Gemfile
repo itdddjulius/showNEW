@@ -52,12 +52,13 @@ group :test do
   gem 'capybara'
   gem 'simplecov'
   gem 'codecov'
-  gem 'database_cleaner'
+  gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
   gem 'launchy'
   gem 'shoulda-matchers'
   gem 'vcr'
   gem 'webmock'
+  gem 'faker', :require => false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
