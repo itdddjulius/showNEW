@@ -73,9 +73,9 @@ module ShowoffApiService
             @widget = response["data"]["widget"]
             widget = current_user.widgets.create(body) #entering data in table as well
             widget.update_attributes(showoff_widget_id: @widget["id"])
-            {code: 200, api_widget: @widget, create_widget: widget}  
+            {code: response["code"], api_widget: @widget, created_widget: widget}  
         rescue => exception
-            flash[:error] = "Something went wrong in widgets create! #{exception}"
+            flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
         end
     end
 

@@ -28,16 +28,12 @@ class WidgetsController < ApplicationController
   def create
     #Creating the logged_in user widget
     response = create_widget
-    @widget = response[:api_widget]
-    widget = response[:widget]
-    respond_to do |format|
-      if @widget.present? && widget.present?
-        format.html { redirect_to my_widget_path, notice: 'Widget was successfully created.' }
-        format.json { render :index, status: :created, location: widget }
-      else
-        format.html { render :new }
-        format.json { render json: widget.errors, status: :unprocessable_entity }
-      end
+    if(response.is_a?(Hash) && response[:code] == 0 && response[:created_widget].present?)
+      @widget = response[:api_widget]
+      redirect_to my_widget_path, notice: 'Widget was successfully created.'
+    else
+      flash[:error] = response
+      redirect_to "/widgets/new"
     end
   end
 
