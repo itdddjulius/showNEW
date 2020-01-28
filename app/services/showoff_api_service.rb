@@ -82,7 +82,7 @@ module ShowoffApiService
             widget.update_attributes(showoff_widget_id: @widget["id"])
             {code: response["code"], api_widget: @widget, created_widget: widget}  
         rescue => exception
-            flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
+            flash[:error] = "Something went wrong in widgets create! #{exception}"
         end
     end
 
@@ -92,7 +92,7 @@ module ShowoffApiService
             #Updating the widget details
             if widget.present?
                 authorization = "Bearer " + current_user.showoff_access_token.to_s
-                api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/" + widget.showoff_widget_id.to_s
+                api_link = WIDGET_URL + widget.showoff_widget_id.to_s
                 body =  {
                             "widget": {
                                         "name": params[:widget]["name"],
@@ -104,7 +104,18 @@ module ShowoffApiService
                 code = @widget["code"]
             end
         rescue => exception
-            flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
+            flash[:error] = "Something went wrong in widgets udpate! #{exception}"
+        end
+    end
+    
+    def destroy_widget
+        begin
+           #Destroy/Delete the widget
+            api_link = WIDGET_URL + params[:id]
+            @widget = showoff_api_call(api_link, "delete", authorization_bearer(current_user.showoff_access_token)) #deleteing widget from showoff database
+            code = @widget["code"]
+        rescue => exception
+            flash[:error] = "Something went wrong in widgets destruction! #{exception}"
         end
     end
 end

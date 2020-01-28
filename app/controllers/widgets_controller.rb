@@ -1,7 +1,7 @@
 class WidgetsController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :authenticate_user!, only: [:show, :index, :search]
-  before_action :set_widget, only: [:show, :edit, :update, :destroy]
+  before_action :set_widget, only: [:edit]
   include ShowoffApiService
   
   def index    
@@ -46,16 +46,9 @@ class WidgetsController < ApplicationController
 
   def destroy
     #Destroy/Delete the widget
-    widget = Widget.find_by(showoff_widget_id: params[:id])
-    if current_user.showoff_user_id == widget.user.showoff_user_id
-      api_link = 'https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/' + params[:id]
-      @widget = showoff_api_call(api_link, "delete", {:Authorization => 'Bearer ' + current_user.showoff_access_token}, nil) #deleteing widget from showoff database
-      widget.destroy #deleting widget from table
-    end
-    respond_to do |format|
-      format.html { redirect_to my_widget_path, notice: 'Widget was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    code = destroy_widget
+    code == 0 ? (redirect_to my_widget_path, notice: 'Widget was successfully destroyed.') : 
+      (redirect_to my_widget_path, flash: { error: 'Something went wrong in destroying widget.' })
   end
 
   def search
