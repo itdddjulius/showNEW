@@ -22,7 +22,7 @@
     <%= form.select "kind", options_for_select([ "visible", "hidden" ], (widget.kind.present? ? widget.kind : "visible")), {}, :class => 'form-control', include_blank: false, required: true %>
   </div>
   <div class="text-center">
-      <%= form.submit button_text, class: "btn btn-primary" %>
-      <a href="/my_widgets" class="btn btn-danger" role="button">Back To My Widgets</a>
-    </div>
+    <%= form.submit button_text, class: "btn btn-primary" %>
+    <a href="/my_widgets" class="btn btn-danger" role="button">Back To My Widgets</a>
+  </div>
 <% end %>
