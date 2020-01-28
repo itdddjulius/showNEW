@@ -1,22 +1,22 @@
 require 'rails_helper'
 context 'Signed in user can' do
 
-  # describe 'see all of their own widgets' do
-  #   it 'displays hidden and visible widgets created by the current user' do
-  #     VCR.use_cassette('User Widgets Index Page') do
+  describe 'see all of their own widgets' do
+    it 'displays hidden and visible widgets created by the current user' do
+      VCR.use_cassette('User Widgets Index Page') do
 
-  #       user = User.create!(first_name: 'Me', last_name: 'Myself', email: 'me@me.com',
-  #         password: 'password', password_confirmation: 'password',
-  #         showoff_access_token: '853cdf1f318125438134afd641b22059a2fe4e5d231a10803cbb0d36241978cf', 
-  #         showoff_refresh_token: '1b16d6f621ca00810eeccf518a39324bfd33a7bae74b7bae08a45d2682f732e4' 
-  #       )
-  #       sign_in user
-  #       visit '/my_widgets'
-  #       expect(page).to have_content('My Widgets')
-  #       expect(page).to have_css('.widgets_list')
-  #     end
-  #   end
-  # end
+        user = User.create!(first_name: 'Me', last_name: 'Myself', email: 'me@me.com',
+          password: 'password', password_confirmation: 'password',
+          showoff_access_token: '853cdf1f318125438134afd641b22059a2fe4e5d231a10803cbb0d36241978cf', 
+          showoff_refresh_token: '1b16d6f621ca00810eeccf518a39324bfd33a7bae74b7bae08a45d2682f732e4' 
+        )
+        sign_in user
+        visit '/my_widgets'
+        expect(page).to have_content('My Widgets')
+        expect(page).to have_css('.widgets_list')
+      end
+    end
+  end
 
   describe 'Create a widget' do
     it 'displays the newly created in the user\'s list of widgets' do
