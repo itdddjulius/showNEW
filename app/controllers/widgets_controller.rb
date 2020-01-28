@@ -35,29 +35,12 @@ class WidgetsController < ApplicationController
   end
 
   def update
+    code = update_widget
     widget = Widget.find_by_id(params[:id])
-    #Updating the widget details
-    if widget.present?
-      authorization = "Bearer " + current_user.showoff_access_token.to_s
-      api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/" + widget.showoff_widget_id.to_s
-      body =  {
-                "widget": {
-                            "name": params[:widget]["name"],
-                            "description": params[:widget]["description"],
-                            "kind": params[:widget]["kind"],
-                          }
-              }
-      @widget = showoff_api_call(api_link, "put", authorization, body)
-      
-      respond_to do |format|
-        if @widget["code"] && widget.update(widget_params)
-          format.html { redirect_to my_widget_path, notice: 'Widget was successfully updated.' }
-          format.json { render :index, status: :ok, location: my_widget_path }
-        else
-          format.html { render :edit }
-          format.json { render json: widget.errors, status: :unprocessable_entity }
-        end
-      end
+    if @widget["code"] && widget.update(widget_params)
+      redirect_to my_widget_path, notice: 'Widget was successfully updated.'
+    else
+      redirect_to my_widget_path, flash: { error: 'Something went wrong in updating.' }
     end
   end
 

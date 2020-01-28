@@ -85,4 +85,26 @@ module ShowoffApiService
             flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
         end
     end
+
+    def update_widget
+        begin
+            widget = Widget.find_by_id(params[:id])
+            #Updating the widget details
+            if widget.present?
+                authorization = "Bearer " + current_user.showoff_access_token.to_s
+                api_link = "https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/" + widget.showoff_widget_id.to_s
+                body =  {
+                            "widget": {
+                                        "name": params[:widget]["name"],
+                                        "description": params[:widget]["description"],
+                                        "kind": params[:widget]["kind"],
+                                    }
+                        }
+                @widget = showoff_api_call(api_link, "put", authorization, body)
+                code = @widget["code"]
+            end
+        rescue => exception
+            flash[:error] = "Something went wrong in widgets create! #{response["message"]}"
+        end
+    end
 end
