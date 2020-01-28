@@ -1,21 +1,25 @@
-<nav class="navbar navbar-inverse">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="/">Showoff</a>
-		</div>
-		<ul class="nav navbar-nav">
-			<li class="active"><a href="/">Widgets</a></li>
-		</ul>
-
-		<ul class="nav navbar-nav navbar-right">
-			<%if user_signed_in?%>
-				<li><%= link_to("My Widgets", my_widget_path) %></li>
-				<li><%= link_to(current_user.first_name, "/users/#{current_user.showoff_user_id}?user_info=true") %></li>
-			 	<li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
-			<%else%>
-				<li><a href="/users/sign_up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-				<li><a href="/users/sign_in"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			<%end%>
-		</ul>
-	</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Showoff Widegts</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span	 class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Widgets <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <ul class="navbar-nav mr-auto">
+        <%if user_signed_in?%>
+          <li class="nav-item"><%= link_to("My Widgets", my_widget_path, class: "nav-link") %></li>
+          <li class="nav-item"><%= link_to(current_user.first_name, "/users/#{current_user.showoff_user_id}?user_info=true", class: "nav-link") %></li>
+          <li class="nav-item"><%= link_to('Logout', destroy_user_session_path, method: :delete, class: "nav-link") %></li>
+        <%else%>
+          <li class="nav-item"><a href="/users/sign_up" class="nav-link"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li class="nav-item"><a href="/users/sign_in" class="nav-link"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <%end%>
+      </ul>
+    </form>
+  </div>
 </nav>

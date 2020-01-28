@@ -11,7 +11,7 @@
     <strong>Image:</strong>
     <%= image_tag (@user["images"]["small_url"]) %>
   </p>
-  <% if current_user.present?%>
+  <% if user_signed_in? && current_page?(:controller => 'widgets', :action => 'my_widget') %>
     <p>
       <strong>Email:</strong>
       <%= current_user.email %>
@@ -32,10 +32,9 @@
       <strong>Date of birth:</strong>
       <%= current_user.date_of_birth %>
     </p>
-    <!-- <%#= link_to 'Edit', edit_user_path(current_user.id), class: "button primary" %> | -->
   <% end -%>
 <% end %>
-<%= link_to 'Back', root_path, class: "button primary" %>
-<div style="margin-top: 15px;">
+<%= link_to 'Back', root_path, class: "btn btn-primary" %>
+<div>
   <%= render 'navigation/widgets_list', locale => {widgets: @widgets} %>
 </div>

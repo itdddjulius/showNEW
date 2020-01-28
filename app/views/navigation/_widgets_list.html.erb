@@ -1,14 +1,16 @@
-<table class="widgets_list">
+<table class="widgets_list table table-bordered">
   <thead>
     <tr>
       <th>Name</th>
       <th>Description</th>
       <th>Kind</th>
       <th>User</th>
-      <th colspan="4"></th>
+      <% if current_page?(:controller => 'widgets', :action => 'my_widget') || params[:user_info].present? %>
+        <th>Edit</th>
+        <th>Destroy</th>
+      <% end %>
     </tr>
   </thead>
-
   <tbody>
     <% @widgets.each do |w| %>
       <tr>
@@ -27,7 +29,6 @@
   </tbody>
 </table>
 <br>
-
 <%if user_signed_in?%>
-  <%= link_to 'New Widget', new_widget_path, class: "button primary" %>
+  <div class="row"><%= link_to 'New Widget', new_widget_path, class: "btn btn-primary" %></div>
 <% end -%>
