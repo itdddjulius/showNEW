@@ -6,7 +6,7 @@ class Users::PasswordsController < Devise::PasswordsController
   # POST /resource/password
   def create
     super
-    #uncomment the following code if you want to recieve a reset password email from showoff.
+    # uncomment the following code if you want to recieve a reset password email from showoff.
     # api_link = URI("https://showoff-rails-react-production.herokuapp.com/api/v1/users/reset_password")
     # body = {
     #           "user": {
@@ -15,7 +15,7 @@ class Users::PasswordsController < Devise::PasswordsController
     #                   "client_id": client_id,
     #                   "client_secret": client_secret
     #         }
-     
+
     # response = showoff_api_call(api_link,"post", nil, body)
     # response
   end
@@ -23,15 +23,14 @@ class Users::PasswordsController < Devise::PasswordsController
   # PUT /resource/password
   def update
     super
-    api_link = URI("https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/password")
-    authorisation = "Bearer " + current_user.showoff_access_token
-    body =  {
+    api_link = URI('https://showoff-rails-react-production.herokuapp.com/api/v1/users/me/password')
+    authorisation = 'Bearer ' + current_user.showoff_access_token
+    body = {
       "user": {
-          "current_password": params[:user][:current_password],
-          "new_password": params[:user][:password]
+        "current_password": params[:user][:current_password],
+        "new_password": params[:user][:password]
       }
-   }
-   showoff_api_call(api_link,"post", authorisation, body)
+    }
+    showoff_api_call(api_link, 'post', authorisation, body)
   end
-  
 end

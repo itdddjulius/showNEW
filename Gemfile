@@ -4,8 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0'
 gem 'pg'
+gem 'rails', '~> 5.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
@@ -26,42 +26,42 @@ gem 'jbuilder', '~> 2.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'rest-client'
-gem 'devise'
-gem "httparty"
 gem 'bootstrap', '~> 4.4.1'
+gem 'devise'
+gem 'httparty'
 gem 'jquery-rails'
+gem 'rest-client'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
-  gem 'pry-rails'
   gem 'fuubar'
+  gem 'pry-rails'
+  gem 'rspec-rails'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'rubocop', require: false
+  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
   gem 'capybara'
-  gem 'simplecov'
   gem 'codecov'
   gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
+  gem 'faker', require: false
   gem 'launchy'
   gem 'shoulda-matchers'
+  gem 'simplecov'
   gem 'vcr'
+  gem 'webdrivers'
   gem 'webmock'
-  gem 'faker', :require => false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

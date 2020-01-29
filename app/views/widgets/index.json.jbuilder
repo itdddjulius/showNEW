@@ -1,1 +1,1 @@
-json.array! @widgets, partial: "widgets/widget", as: :widget
+json.array! @widgets, partial: 'widgets/widget', as: :widget

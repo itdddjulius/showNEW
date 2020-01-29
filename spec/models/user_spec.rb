@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
         last_name: 'Finkle',
         email: 'imray@finkle.com',
         password: 'loiseinhorn',
-        password_confirmation: 'loiseinhorn',
+        password_confirmation: 'loiseinhorn'
       }
 
       user = User.create(attributes)
