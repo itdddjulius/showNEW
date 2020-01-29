@@ -6,7 +6,9 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/">Widgets <span class="sr-only">(current)</span></a>
+        <%if user_signed_in?%>
+            <%= link_to 'New Widget', new_widget_path, class: "nav-link" %>
+        <% end -%>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -21,5 +23,9 @@
         <%end%>
       </ul>
     </form>
+    <%= form_tag(search_path(:my_search => controller.action_name), method: :post, :class => "form-inline my-2 my-lg-0 search_button") do %>
+      <%= text_field_tag(:search, params[:search], :class => "form-control mr-sm-2", :placeholder=>"Search Widgets" ) %>
+      <%= submit_tag("Search", :class=>"btn btn-outline-success my-2 my-sm-0") %>
+    <% end %>
   </div>
 </nav>

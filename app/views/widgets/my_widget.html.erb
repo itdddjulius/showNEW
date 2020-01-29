@@ -1,8 +1,4 @@
 <h1 style="text-align: center;"><u>My Widgets</u></h1>
-<%= form_tag(search_path(:my_search => "true"), method: :post, :class => "form-inline search_button") do %>
-  <%= text_field_tag(:search, params[:search], :class => "form-control mr-sm-2", :placeholder=>"Search" ) %>
-  <%= submit_tag("Search", :class=>"btn btn-outline-success my-2 my-sm-0") %>
-<% end %>
 <%if @widgets %>
   <table class="widgets_list table table-bordered">
     <thead>
@@ -36,8 +32,4 @@
   </table>
 <% else -%>
   <strong>No data returned</strong>
-<% end -%>
-<br>
-<%if user_signed_in?%>
-  <div class="row"><%= link_to 'New Widget', new_widget_path, class: "btn btn-primary" %></div>
 <% end -%>
