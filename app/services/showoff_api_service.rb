@@ -126,7 +126,7 @@ module ShowoffApiService
     #Searching for a particular word in a widget
     def search_widgets
         begin
-            if current_user.present?
+            if current_user.present? && params[:my_search].eql?("true")
                 api_link = USER_WIDGETS + current_user.showoff_user_id.to_s + "/widgets?client_id=" + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s #using User ID API
             else
                 api_link = VISIBLE_WIDGETS_URL + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s
