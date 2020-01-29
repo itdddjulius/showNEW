@@ -5,8 +5,9 @@ module ShowoffApiService
     private
 
     #This method will list current user's all widgets and other user's visible widgets only. 
-    def visible_widgets(user_id, user_info)
+    def visible_widgets
         begin
+            user_id, user_info = params[:id], params[:user_info]
             if user_info.eql?("true") 
                 my_widgets_url = MY_USER_WIDGETS + "client_id=#{client_id}&client_secret=#{client_secret}" 
                 response = showoff_api_call(my_widgets_url, "get", authorization_bearer(current_user.showoff_access_token))
