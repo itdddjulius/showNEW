@@ -5,14 +5,13 @@ class WidgetsController < ApplicationController
   include ShowoffApiService
   
   def index    
-    #Display all the visible widget on the root page
-    all_visible_widgets(params[:id], params[:user_info])
+    #Display all the visible widget on the root page. Defined in ShowoffApiService
+    all_visible_widgets
   end
 
   def my_widget
-    #Displays logged_in users widgets
-    code = my_widgets
-    redirect_to "/" if code != 200 
+    #Displays logged_in users widgets. Defined in ShowoffApiService
+    my_widgets
   end
 
   def new
@@ -23,48 +22,27 @@ class WidgetsController < ApplicationController
   end
 
   def create
-    #Creating the logged_in user widget
-    response = create_widget
-    if(response.is_a?(Hash) && response[:code] == 0 && response[:created_widget].present?)
-      @widget = response[:api_widget]
-      redirect_to my_widget_path, notice: 'Widget was successfully created.'
-    else
-      flash[:error] = response
-      redirect_to "/widgets/new"
-    end
+    #Creating the logged_in user widget. Defined in ShowoffApiService
+    create_widget
   end
 
   def update
-    code = update_widget
-    widget = Widget.find_by_id(params[:id])
-    if @widget["code"] && widget.update(widget_params)
-      redirect_to my_widget_path, notice: 'Widget was successfully updated.'
-    else
-      redirect_to my_widget_path, flash: { error: 'Something went wrong in updating.' }
-    end
+    update_widget
   end
 
   def destroy
     #Destroy/Delete the widget
-    code = destroy_widget
-    code == 0 ? (redirect_to my_widget_path, notice: 'Widget was successfully destroyed.') : 
-      (redirect_to my_widget_path, flash: { error: 'Something went wrong in destroying widget.' })
+    destroy_widget
   end
 
   def search
     #Searching for a particular word in a widget
-    code = search_widgets
-    redirect_to "/" if code != 200
+    search_widgets
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_widget
       @widget = Widget.find_by(showoff_widget_id: params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def widget_params
-      params.require(:widget).permit(:name, :description, :kind)
     end
 end

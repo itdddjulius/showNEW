@@ -4,7 +4,7 @@ module ShowoffApiService
     
     private
 
-    #This method will list current user all widgets and other user visible widgets only. 
+    #This method will list current user's all widgets and other user's visible widgets only. 
     def visible_widgets(user_id, user_info)
         begin
             if user_info.eql?("true") 
@@ -30,45 +30,32 @@ module ShowoffApiService
     end
 
     #This method will list all visible widgets. 
-    def all_visible_widgets(user_id, user_info)
+    def all_visible_widgets
         begin
+            user_id = params[:id]
             api_link = VISIBLE_WIDGETS_URL + client_id + "&client_secret=" + client_secret
             response = showoff_api_call(api_link,"get")
             @widgets = response["data"]["widgets"]
-            response = 200
+            code = response["code"]
+            flash[:error] = response["message"] if code != 0
         rescue => exception
             flash[:error] = "Something went wrong in widgets index! #{exception}"
         end
     end
 
+    #Displays logged_in users widgets
     def my_widgets
-        #Displays logged_in users widgets
         begin
             api_link = USER_WIDGETS + current_user.showoff_user_id.to_s + "/widgets?client_id=" + client_id + "&client_secret=" + client_secret #Using User ID API
             response = showoff_api_call(api_link,"get", authorization_bearer(current_user.showoff_access_token))  
-            @widgets = response["data"]["widgets"] 
-            code = 200
+            @widgets = response["data"]["widgets"]
+            code = response["code"]
+            flash[:error] = response["message"] if code != 0
         rescue => exception
-            flash[:error] = "Something went wrong in widgets index! #{exception}"
+            flash[:error] = "Something went wrong in widgets my_widgets! #{exception}"
         end
     end
 
-    def search_widgets
-        #Searching for a particular word in a widget
-        begin
-            if current_user.present?
-                api_link = USER_WIDGETS + current_user.showoff_user_id.to_s + "/widgets?client_id=" + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s #using User ID API
-            else
-                api_link = VISIBLE_WIDGETS_URL + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s
-            end
-            response = showoff_api_call(api_link,"get")
-            @widgets = response["data"]["widgets"]
-            code = 200 
-        rescue => exception
-            flash[:error] = "Something went wrong in widgets index! #{exception}"
-        end
-    end
-    
     def create_widget
         begin
             body = {
@@ -80,7 +67,12 @@ module ShowoffApiService
             @widget = response["data"]["widget"]
             widget = current_user.widgets.create(body) #entering data in table as well
             widget.update_attributes(showoff_widget_id: @widget["id"])
-            {code: response["code"], api_widget: @widget, created_widget: widget}  
+            code = response["code"].to_i
+            if code == 0
+                redirect_to my_widget_path, notice: 'Widget was successfully created.'
+            else
+                redirect_to new_widget_path, flash: { error: response["message"] }
+            end
         rescue => exception
             flash[:error] = "Something went wrong in widgets create! #{exception}"
         end
@@ -102,6 +94,11 @@ module ShowoffApiService
                         }
                 @widget = showoff_api_call(api_link, "put", authorization, body)
                 code = @widget["code"]
+                if code == 0 && widget.update(widget_params)
+                    redirect_to my_widget_path, notice: 'Widget was successfully updated.'
+                else
+                    redirect_to my_widget_path, flash: { error: "Something went wrong in updating. #{@widget[:message]}" }
+                end
             end
         rescue => exception
             flash[:error] = "Something went wrong in widgets udpate! #{exception}"
@@ -110,12 +107,40 @@ module ShowoffApiService
     
     def destroy_widget
         begin
-           #Destroy/Delete the widget
+            #Destroy/Delete the widget
             api_link = WIDGET_URL + params[:id]
             @widget = showoff_api_call(api_link, "delete", authorization_bearer(current_user.showoff_access_token)) #deleteing widget from showoff database
             code = @widget["code"]
+            redirect_path = my_widget_path
+            if(code == 0)
+                redirect_to redirect_path, notice: 'Widget was successfully destroyed.'
+            else
+                redirect_to redirect_path, flash: { error: "Something went wrong in destroying widget. #{@widget["message"]}" }
+            end
         rescue => exception
             flash[:error] = "Something went wrong in widgets destruction! #{exception}"
         end
+    end
+
+    #Searching for a particular word in a widget
+    def search_widgets
+        begin
+            if current_user.present?
+                api_link = USER_WIDGETS + current_user.showoff_user_id.to_s + "/widgets?client_id=" + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s #using User ID API
+            else
+                api_link = VISIBLE_WIDGETS_URL + client_id + "&client_secret=" + client_secret + "&term=" + params[:search].to_s
+            end
+            response = showoff_api_call(api_link,"get")
+            @widgets = response["data"]["widgets"]
+            code = response["code"]
+            flash[:error] = response["message"] if code != 0
+        rescue => exception
+            flash[:error] = "Something went wrong in widgets index! #{exception}"
+        end
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def widget_params
+        params.require(:widget).permit(:name, :description, :kind)
     end
 end
