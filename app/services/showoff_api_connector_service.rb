@@ -1,4 +1,4 @@
-#This class will connect the showoff API by Net::HTTP and RestClient. 
+#This class will connect the showoff API by Net::HTTP and RestClient post put get and delete calls. 
 module ShowoffApiConnectorService
     require "uri"
     require "net/http"
