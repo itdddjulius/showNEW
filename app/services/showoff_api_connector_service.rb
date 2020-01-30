@@ -41,14 +41,6 @@ module ShowoffApiConnectorService
   end
 
   def refresh_token
-    # api_link = URI(REFRESH_TOKEN)
-    # body = {
-    #           "grant_type": "refresh_token",
-    #           "refresh_token": current_user.showoff_refresh_token,
-    #           "client_id": client_id,
-    #           "client_secret": client_secret
-    #         }.to_json
-    # response = showoff_api_call(api_link,"post", authorization_bearer(current_user.showoff_access_token), body)
     url = URI('https://showoff-rails-react-production.herokuapp.com/oauth/token')
 
     https = Net::HTTP.new(url.host, url.port)

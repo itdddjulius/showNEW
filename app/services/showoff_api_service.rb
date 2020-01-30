@@ -115,6 +115,8 @@ module ShowoffApiService
       api_link = USER_WIDGETS + current_user.showoff_user_id.to_s + '/widgets?client_id=' + client_id + '&client_secret=' + client_secret + '&term=' + params[:search].to_s # using User ID API
     elsif params[:my_search].eql?('index')
       api_link = VISIBLE_WIDGETS_URL + client_id + '&client_secret=' + client_secret + '&term=' + params[:search].to_s
+    else
+      api_link = VISIBLE_WIDGETS_URL + client_id + '&client_secret=' + client_secret + '&term=' + params[:search].to_s
     end
     response = showoff_api_call(api_link, 'get')
     @widgets = response['data']['widgets']
