@@ -32,6 +32,12 @@ Run `rspec` to run the full test suite. Following test cases are covered:
 3. Controller tests.
 4. Functional tests.
 
+## Important files to view
+1. [ShowoffApiConnectorService](https://github.com/nabeelnazir/Showoff-Application/blob/master/app/services/showoff_api_connector_service.rb) class will connect the showoff API by Net::HTTP and RestClient post put get and delete calls.
+2. [ShowoffApiService](https://github.com/nabeelnazir/Showoff-Application/blob/master/app/services/showoff_api_service.rb) class will consume showoff API calls by using ShowoffApiConnectorService class.
+3. [WidgetsController](https://github.com/nabeelnazir/Showoff-Application/blob/master/app/controllers/widgets_controller.rb) has all methods for example create, delete, update, edit and search widgets.
+4. [Rspec](https://github.com/nabeelnazir/Showoff-Application/tree/master/spec) test cases are present in the app.
+
 ## Dependencies
  ### All Environments
  - [Ruby](https://www.ruby-lang.org/en/)
@@ -57,4 +63,4 @@ Run `rspec` to run the full test suite. Following test cases are covered:
  https://drive.google.com/file/d/1GGrLozHEe5-CFJ7EOIUbo4XLFt0spHyS/view?usp=sharing
  
  ## Contributors/Developers
-[Me!](https://github.com/nabeelnazir)
+[Iam!](https://github.com/nabeelnazir)
